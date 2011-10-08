@@ -36,9 +36,10 @@ public class ExtractRedirectData {
   private static String redirectPattern = "    <redirect";
   private static String textPattern     = "      <text xml";
   private static Pattern pRedirect = Pattern.compile(
-          "#REDIRECT[ ]?\\[\\[(.+?)\\]\\]", Pattern.CASE_INSENSITIVE);
+          "#[ ]?[^ ]+[ ]?\\[\\[(.+?)\\]\\]", Pattern.CASE_INSENSITIVE);
   
   public void run(String filepath) throws Exception {
+    int invalidCount = 0;
     long t0 = System.nanoTime();
     File f = new File(filepath);
     if (!f.exists()) {
@@ -76,9 +77,12 @@ public class ExtractRedirectData {
             String redirectedTitle = m.group(1);
             if ( isValidAlias(title, redirectedTitle) ) {
               redirectData.put(title, redirectedTitle);
+            } else {
+              invalidCount++;
             }
           } catch ( StringIndexOutOfBoundsException e ) {
             System.out.println("ERROR: cannot extract redirection from title = "+title+", text = "+text);
+            e.printStackTrace();
           }
         } else { // Very rare case, so not using StringBuilder for concatenation 
           inText = true;
@@ -91,13 +95,14 @@ public class ExtractRedirectData {
     System.out.println("---- Wikipedia redirect extraction done ----");
     long t1 = System.nanoTime();
     IOUtil.save(redirectData);
-    System.out.println("Found "+redirectData.size()+" redirects.");
+    System.out.println("Discarded "+invalidCount+" redirects.");
+    System.out.println("Acquired "+redirectData.size()+" redirects.");
     System.out.println("Done in "+((double)(t1-t0)/(double)1000000000)+" [sec]");
   }
   
   private String cleanupTitle( String title ) {
     int end = title.indexOf("</title>");
-    return title.substring(titlePattern.length(), end);
+    return end!=-1?title.substring(titlePattern.length(), end):title;
   }
 
 //  private String cleanupRedirect( String text, int start, int end ) {
