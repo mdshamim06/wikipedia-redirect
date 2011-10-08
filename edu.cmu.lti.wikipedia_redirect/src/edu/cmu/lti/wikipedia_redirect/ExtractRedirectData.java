@@ -60,14 +60,18 @@ public class ExtractRedirectData {
         isRedirect = true;
       }
       if (isRedirect && (line.startsWith(textPattern) || inText)) {
-        int start = line.indexOf("[[")+2;
+        int start = line.indexOf("[[");
         int end = line.indexOf("]]");
-        if (start!=1 && end!=-1) { // make sure current text contains [[...]]
+        if (start!=-1 && end!=-1) { // make sure current text contains [[...]]
           text  = line;
-          title = cleanupTitle(title);
-          String redirectedTitle  = cleanupRedirect(text, start, end);
-          if ( isValidAlias(title, redirectedTitle) ) {
-            redirectData.put(title, redirectedTitle);
+          try {
+            title = cleanupTitle(title);
+            String redirectedTitle  = cleanupRedirect(text, start+2, end);
+            if ( isValidAlias(title, redirectedTitle) ) {
+              redirectData.put(title, redirectedTitle);
+            }
+          } catch ( StringIndexOutOfBoundsException e ) {
+            System.out.println("ERROR: cannot extract redirection from title = "+title+", text = "+text);
           }
         } else { // Very rare case, so not using StringBuilder for concatenation 
           inText = true;
