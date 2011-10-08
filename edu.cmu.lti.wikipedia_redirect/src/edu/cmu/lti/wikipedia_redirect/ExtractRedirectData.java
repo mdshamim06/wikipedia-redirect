@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -33,6 +35,8 @@ public class ExtractRedirectData {
   private static String titlePattern    = "    <title>";
   private static String redirectPattern = "    <redirect";
   private static String textPattern     = "      <text xml";
+  private static Pattern pRedirect = Pattern.compile(
+          "#REDIRECT[ ]?\\[\\[(.+?)\\]\\]", Pattern.CASE_INSENSITIVE);
   
   public void run(String filepath) throws Exception {
     long t0 = System.nanoTime();
@@ -60,13 +64,16 @@ public class ExtractRedirectData {
         isRedirect = true;
       }
       if (isRedirect && (line.startsWith(textPattern) || inText)) {
-        int start = line.indexOf("[[");
-        int end = line.indexOf("]]");
-        if (start!=-1 && end!=-1) { // make sure current text contains [[...]]
+        Matcher m = pRedirect.matcher(line); // wait heavy regex until here.
+//        int start = line.indexOf("[[");
+//        int end = line.indexOf("]]");
+//        if (start!=-1 && end!=-1) { // make sure current text contains [[...]]
+        if (m.find()) { // make sure current text contains [[...]]
           text  = line;
           try {
             title = cleanupTitle(title);
-            String redirectedTitle  = cleanupRedirect(text, start+2, end);
+//            String redirectedTitle  = cleanupRedirect(text, start+2, end);
+            String redirectedTitle = m.group(1);
             if ( isValidAlias(title, redirectedTitle) ) {
               redirectData.put(title, redirectedTitle);
             }
@@ -93,9 +100,9 @@ public class ExtractRedirectData {
     return title.substring(titlePattern.length(), end);
   }
 
-  private String cleanupRedirect( String text, int start, int end ) {
-    return text.substring(start, end);
-  }
+//  private String cleanupRedirect( String text, int start, int end ) {
+//    return text.substring(start, end);
+//  }
   
   /**
    * Identifies if the redirection is valid.
