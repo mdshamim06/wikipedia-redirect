@@ -23,6 +23,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * Represents the wikipedia redirect data.
+ * 
+ * @author Hideki Shima
+ *
+ */
 public class WikipediaRedirect extends LinkedHashMap<String,String>
  implements Serializable {
 
@@ -43,7 +49,7 @@ public class WikipediaRedirect extends LinkedHashMap<String,String>
 
   public static class EntryComparator 
     implements Comparator<Entry<String,String>> {
-    @Override
+    
     public int compare(Entry<String, String> e1, 
             Entry<String, String> e2) {
       return e1.getKey().compareTo(e2.getKey());
