@@ -32,7 +32,6 @@ public class IOUtil {
     if (!outputDir.exists()) {
       outputDir.mkdirs();
     }
-    System.out.println(redirectData.entrySet().getClass().getCanonicalName());
     WikipediaRedirect list = new WikipediaRedirect(redirectData);
     
     File txtFile = new File(outputDir, "wikipedia_redirect.txt");

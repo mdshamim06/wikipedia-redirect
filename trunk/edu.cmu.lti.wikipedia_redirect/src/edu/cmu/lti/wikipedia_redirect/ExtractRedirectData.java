@@ -95,8 +95,8 @@ public class ExtractRedirectData {
     System.out.println("---- Wikipedia redirect extraction done ----");
     long t1 = System.nanoTime();
     IOUtil.save(redirectData);
-    System.out.println("Discarded "+invalidCount+" redirects.");
-    System.out.println("Acquired "+redirectData.size()+" redirects.");
+    System.out.println("Discarded "+invalidCount+" redirects to wikipedia meta articles.");
+    System.out.println("Extracted "+redirectData.size()+" redirects.");
     System.out.println("Done in "+((double)(t1-t0)/(double)1000000000)+" [sec]");
   }
   
