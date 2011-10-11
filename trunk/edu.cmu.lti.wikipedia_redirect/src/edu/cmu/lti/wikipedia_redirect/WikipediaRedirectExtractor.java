@@ -65,15 +65,11 @@ public class WikipediaRedirectExtractor {
         isRedirect = true;
       }
       if (isRedirect && (line.startsWith(textPattern) || inText)) {
-        Matcher m = pRedirect.matcher(line); // wait heavy regex until here.
-//        int start = line.indexOf("[[");
-//        int end = line.indexOf("]]");
-//        if (start!=-1 && end!=-1) { // make sure current text contains [[...]]
-        if (m.find()) { // make sure current text contains [[...]]
+        Matcher m = pRedirect.matcher(line); // slow regex shouldn't be used until here.
+        if (m.find()) { // make sure the current text field contains [[...]]
           text  = line;
           try {
             title = cleanupTitle(title);
-//            String redirectedTitle  = cleanupRedirect(text, start+2, end);
             String redirectedTitle = m.group(1);
             if ( isValidAlias(title, redirectedTitle) ) {
               redirectData.put(title, redirectedTitle);
@@ -84,7 +80,7 @@ public class WikipediaRedirectExtractor {
             System.out.println("ERROR: cannot extract redirection from title = "+title+", text = "+text);
             e.printStackTrace();
           }
-        } else { // Very rare case, so not using StringBuilder for concatenation 
+        } else { // Very rare case 
           inText = true;
         }
       }
@@ -105,16 +101,12 @@ public class WikipediaRedirectExtractor {
     return end!=-1?title.substring(titlePattern.length(), end):title;
   }
 
-//  private String cleanupRedirect( String text, int start, int end ) {
-//    return text.substring(start, end);
-//  }
-  
   /**
    * Identifies if the redirection is valid.
    * Currently, we only check if the redirection is related to
    * a special Wikipedia page or not.
    * 
-   * TODO: write more rules. 
+   * TODO: write more rules to discard more invalid redirects.
    *  
    * @param title source title
    * @param redirectedTitle target title
