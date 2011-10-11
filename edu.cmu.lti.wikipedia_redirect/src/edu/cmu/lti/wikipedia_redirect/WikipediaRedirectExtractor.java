@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 
+ * Extracts wikipedia redirect information and serializes the data.
  * 
  * @author Hideki Shima
  *

@@ -25,6 +25,12 @@ import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * Reads and writes wikipedia redirect data.
+ * 
+ * @author Hideki Shima
+ *
+ */
 public class IOUtil {
 
   public static void save( Map<String,String> redirectData ) throws Exception {
