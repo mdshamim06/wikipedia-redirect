@@ -1,9 +1,7 @@
 package edu.cmu.lti.wikipedia_redirect;
-
 import java.io.File;
 
 public class Demo {
-
   public static void main(String[] args) throws Exception {
     WikipediaRedirect wr = IOUtil.load(new File(args[0]));
     String[] srcTerms = {"オサマビンラディン", "オサマ・ビンラーディン"
@@ -14,5 +12,4 @@ public class Demo {
     }
     System.out.println(sb.toString());
   }
-  
 }
