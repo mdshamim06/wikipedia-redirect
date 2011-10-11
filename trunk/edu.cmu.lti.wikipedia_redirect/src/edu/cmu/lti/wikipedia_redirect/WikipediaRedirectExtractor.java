@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * @author Hideki Shima
  *
  */
-public class ExtractRedirectData {
+public class WikipediaRedirectExtractor {
 
   private static String titlePattern    = "    <title>";
   private static String redirectPattern = "    <redirect";
@@ -128,6 +128,6 @@ public class ExtractRedirectData {
   }
   
   public static void main(String[] args) throws Exception {
-    new ExtractRedirectData().run(args[0]);
+    new WikipediaRedirectExtractor().run(args[0]);
   }
 }
