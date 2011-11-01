@@ -19,12 +19,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 /**
  * Represents the wikipedia redirect data.
+ * 
+ * Things you should know: key-value is one-to-many in Wikipedia Redirect.
+ * Let's denote X -> Y when a source term X redirects to the term B.
+ * X is unique in the entire Wikipedia Redirect data set, but Y is not.
+ * In other words, there exists a Y such that X -> Y and X' -> Y. 
  * 
  * @author Hideki Shima
  *
@@ -45,6 +52,16 @@ public class WikipediaRedirect extends LinkedHashMap<String,String>
     for ( Entry<String, String> entry : list ) {
       this.put( entry.getKey(), entry.getValue() );
     }
+  }
+
+  public Set<String> getKeysByValue(String value) {
+    Set<String> results = new HashSet<String>();
+    for (Entry<String,String> entry : entrySet()) {
+      if (value.equals(entry.getValue())) {
+        results.add(entry.getKey());
+      }
+    }
+    return results;
   }
 
   public static class EntryComparator 
