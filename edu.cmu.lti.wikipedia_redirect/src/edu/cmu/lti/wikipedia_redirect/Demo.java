@@ -15,7 +15,7 @@ public class Demo {
     long t0 = System.nanoTime();
     WikipediaRedirect wr = IOUtil.loadWikipediaRedirect(new File(args[0]));
     long t1 = System.nanoTime();
-    System.out.println(" Done in "+(double)(t1-t0)/(double)1000000000+" sec.\n");
+    System.out.println(" done in "+(double)(t1-t0)/(double)1000000000+" sec.\n");
     
     // Let's find a redirection given a source word.
     String[] srcTerms = {"オサマビンラディン", "オサマ・ビンラーディン",
@@ -25,11 +25,12 @@ public class Demo {
     for ( String src : srcTerms ) {
       sb.append("\""+wr.get(src)+"\" was redirected from \""+src+"\"\n");
     }
-    System.out.println(sb.toString());
-    
-    // Let's find which source words redirect to the given target word. 
-    Set<String> keys = wr.getKeysByValue("東北地方太平洋沖地震");
-    System.out.println(keys);
+    System.out.println(sb.toString()+"--\n");
+
+    // Let's find which source words redirect to the given target word.
+    String target = "東北地方太平洋沖地震";
+    Set<String> keys = wr.getKeysByValue(target);
+    System.out.println("All of the following redirect to \""+target+"\":\n"+keys);
   }
   
 }
