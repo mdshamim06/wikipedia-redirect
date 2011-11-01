@@ -27,7 +27,7 @@ public class Demo {
     }
     System.out.println(sb.toString());
     
-    // Let's find which source words redirects to the given target word. 
+    // Let's find which source words redirect to the given target word. 
     Set<String> keys = wr.getKeysByValue("東北地方太平洋沖地震");
     System.out.println(keys);
   }
