@@ -38,15 +38,10 @@ public class WikipediaRedirectExtractor {
   private static Pattern pRedirect = Pattern.compile(
           "#[ ]?[^ ]+[ ]?\\[\\[(.+?)\\]\\]", Pattern.CASE_INSENSITIVE);
   
-  public void run(String filepath) throws Exception {
+  public void run(File file) throws Exception {
     int invalidCount = 0;
     long t0 = System.nanoTime();
-    File f = new File(filepath);
-    if (!f.exists()) {
-      System.err.println("ERROR: File not found at "+f.getAbsolutePath());
-      return;
-    }
-    FileInputStream fis = new FileInputStream(f);
+    FileInputStream fis = new FileInputStream(file);
     Map<String,String> redirectData = new HashMap<String,String>();
     InputStreamReader isr = new InputStreamReader(fis, "utf-8");
     BufferedReader br = new BufferedReader(isr);
@@ -120,6 +115,16 @@ public class WikipediaRedirectExtractor {
   }
   
   public static void main(String[] args) throws Exception {
-    new WikipediaRedirectExtractor().run(args[0]);
+    if (args.length!=1) {
+      System.err.println("ERROR: Please specify the path to the wikipedia article xml file as the argument.");
+      System.err.println("Tips: enclose the path with double quotes if a space exists in the path.");
+      return;
+    }
+    File f = new File(args[0]);
+    if (!f.exists()) {
+      System.err.println("ERROR: File not found at "+f.getAbsolutePath());
+      return;
+    }
+    new WikipediaRedirectExtractor().run(f);
   }
 }
