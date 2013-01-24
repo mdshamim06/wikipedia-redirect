@@ -32,8 +32,9 @@ public class WikipediaHypernym extends LinkedHashMap<String,List<String>>
 
   private static final long serialVersionUID = 20111019L;
 
-  public WikipediaHypernym() {
-    super();
+  public WikipediaHypernym( int size ) {
+    // RAM (heap) efficient capacity setting
+    super( size * 4 / 3 + 1 );
   }
   
   public void load( File file ) throws Exception {

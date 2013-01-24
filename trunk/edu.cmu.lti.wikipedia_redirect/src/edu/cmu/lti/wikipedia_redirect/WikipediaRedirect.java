@@ -16,14 +16,12 @@
 package edu.cmu.lti.wikipedia_redirect;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Represents the wikipedia redirect data.
@@ -41,17 +39,13 @@ public class WikipediaRedirect extends LinkedHashMap<String,String>
 
   private static final long serialVersionUID = 20111008L;
 
-  public WikipediaRedirect() {
-    super();
+  public WikipediaRedirect( int size ) {
+    // RAM (heap) efficient capacity setting
+    super( size * 4 / 3 + 1 );
   }
 
   public WikipediaRedirect( Map<String, String> map ) {
-    super();
-    ArrayList<Entry<String,String>> list = new ArrayList<Entry<String,String>>( map.entrySet() );
-    Collections.sort(list, new EntryComparator());
-    for ( Entry<String, String> entry : list ) {
-      this.put( entry.getKey(), entry.getValue() );
-    }
+    super( map );
   }
 
   public Set<String> getKeysByValue(String value) {
