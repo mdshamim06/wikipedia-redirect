@@ -41,7 +41,7 @@ public class WikipediaRedirectExtractor {
   
   public void run( File inputFile, File outputFile ) throws Exception {
     int invalidCount = 0;
-    long t0 = System.nanoTime();
+    long t0 = System.currentTimeMillis();
     FileInputStream fis = new FileInputStream( inputFile );
 //    TreeMap<String,String> map = new HashMap<String,String>();
     InputStreamReader isr = new InputStreamReader(fis, "utf-8");
@@ -96,11 +96,12 @@ public class WikipediaRedirectExtractor {
     osw.close();
     fos.close();
     System.out.println("---- Wikipedia redirect extraction done ----");
-    long t1 = System.nanoTime();
+    long t1 = System.currentTimeMillis();
 //    IOUtil.save( map );
     System.out.println("Discarded "+invalidCount+" redirects to wikipedia meta articles.");
     System.out.println("Extracted "+count+" redirects.");
-    System.out.println("Done in "+((double)(t1-t0)/(double)1000000000)+" [sec]");
+    System.out.println("Saved output: "+outputFile.getAbsolutePath());
+    System.out.println("Done in "+((t1-t0)/1000)+" sec.");
   }
   
   private String cleanupTitle( String title ) {
@@ -137,11 +138,12 @@ public class WikipediaRedirectExtractor {
       System.err.println("ERROR: File not found at "+inputFile.getAbsolutePath());
       return;
     }
+    String prefix = inputFile.getName().replaceFirst("-.*", "");
     File outputDir = new File("target");
     if (!outputDir.exists()) {
       outputDir.mkdirs();
     }
-    File outputFile = new File(outputDir, "wikipedia_redirect.txt");
+    File outputFile = new File(outputDir, prefix+"-redirect.txt");
     new WikipediaRedirectExtractor().run( inputFile, outputFile );
   }
 }

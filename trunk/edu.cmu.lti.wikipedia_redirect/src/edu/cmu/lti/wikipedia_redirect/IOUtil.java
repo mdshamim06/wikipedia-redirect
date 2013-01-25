@@ -102,6 +102,10 @@ public class IOUtil {
    * @throws Exception
    */
   public static WikipediaRedirect loadWikipediaRedirect( File f ) throws Exception {
+    if (!f.exists()) {
+      System.err.println("File not found: "+f.getAbsolutePath());
+      System.exit(-1);
+    }
     if ( f.getName().endsWith(".ser") ) {
       return loadWikipediaRedirectFromSerialized( f );
     } else {
