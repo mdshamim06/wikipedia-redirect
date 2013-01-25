@@ -17,7 +17,7 @@ package edu.cmu.lti.wikipedia_redirect;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -51,8 +51,16 @@ public class WikipediaRedirect extends HashMap<String,String>
     super( map );
   }
 
+  /**
+   * Get keys in the map such that the value equals to the given value.
+   *   
+   * @param value
+   * @return keys
+   */
   public Set<String> getKeysByValue(String value) {
-    Set<String> results = new HashSet<String>();
+    Set<String> results = new LinkedHashSet<String>();
+    //Iterating through all items is slow.
+    //TODO: use existing library for faster access e.g. guava.
     for (Entry<String,String> entry : entrySet()) {
       if (value.equals(entry.getValue())) {
         results.add(entry.getKey());
