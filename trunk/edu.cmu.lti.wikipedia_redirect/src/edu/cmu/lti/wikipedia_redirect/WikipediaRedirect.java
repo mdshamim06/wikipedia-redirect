@@ -35,6 +35,7 @@ import java.util.Set;
  */
 public class WikipediaRedirect extends HashMap<String,String>
  implements Serializable {
+  //Do we need case insensitive hash map? C.f. http://www.coderanch.com/t/385950/java/java/HashMap-key-case-insensitivity
 
   private static final long serialVersionUID = 20111008L;
 
