@@ -121,7 +121,10 @@ public class WikipediaRedirectExtractor {
    * @return validity
    */
   private boolean isValidAlias( String title, String redirectedTitle ) {
-    if ( title.indexOf("Wikipedia:")!=-1 ) {
+    if ( title.startsWith("Wikipedia:") 
+            || title.startsWith("Template:")
+            || title.startsWith("Portal:")
+            || title.startsWith("List of ")) {
       return false;
     }
     return true;
@@ -134,7 +137,7 @@ public class WikipediaRedirectExtractor {
       return;
     }
     File inputFile = new File(args[0]);
-    if (!inputFile.exists()) {
+    if (!inputFile.exists() || inputFile.isDirectory()) {
       System.err.println("ERROR: File not found at "+inputFile.getAbsolutePath());
       return;
     }
