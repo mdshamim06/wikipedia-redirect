@@ -26,13 +26,10 @@ import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-
-import edu.cmu.lti.wikipedia_redirect.WikipediaRedirect.EntryComparator;
 
 /**
  * Reads and writes wikipedia redirect data.
@@ -49,17 +46,12 @@ public class IOUtil {
    *   map where key is original term and value is redirected term
    * @throws Exception
    */
-  public static void save( Map<String,String> redirectData ) throws Exception {
+  public static void save( AbstractMap<String,String> map ) throws Exception {
     File outputDir = new File("target");
     if (!outputDir.exists()) {
       outputDir.mkdirs();
     }
-    WikipediaRedirect wr = new WikipediaRedirect( redirectData.size() );
-    ArrayList<Entry<String,String>> list = new ArrayList<Entry<String,String>>( redirectData.entrySet() );
-    Collections.sort(list, new EntryComparator());
-    for ( Entry<String, String> entry : list ) {
-      wr.put( entry.getKey(), entry.getValue() );
-    }
+    WikipediaRedirect wr = new WikipediaRedirect( map );
     saveText( wr, outputDir );
     saveSerialized( wr, outputDir );
   }
@@ -79,7 +71,6 @@ public class IOUtil {
     for ( Entry<String,String> entry : wr.entrySet() ) {
       bw.write( entry.getKey()+"\t"+entry.getValue()+"\n" );
     }
-    bw.flush();
     bw.close();
     osw.close();
     fosTxt.close();
