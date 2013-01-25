@@ -18,11 +18,11 @@ public class Demo {
   
   public static void main(String[] args) throws Exception {
     // Initialization
-    System.out.print("Deserializing Wikipedia Redirect ...");
+    System.out.print("Loading Wikipedia Redirect ...");
     long t0 = System.currentTimeMillis();
-    String inputFile = args[0];
-    WikipediaRedirect wr = IOUtil.loadWikipediaRedirect(new File(inputFile));
-    boolean isJapaneseExample = inputFile.substring(0, 2).equals("ja");
+    File inputFile = new File(args[0]);
+    WikipediaRedirect wr = IOUtil.loadWikipediaRedirect(inputFile);
+    boolean isJapaneseExample = inputFile.getName().substring(0, 2).equals("ja");
     String[] srcTerms = isJapaneseExample ? jaSrcTerms : enSrcTerms;
     String target = isJapaneseExample ? jaTarget : enTarget;
     long t1 = System.currentTimeMillis();
