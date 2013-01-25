@@ -18,7 +18,7 @@ package edu.cmu.lti.wikipedia_redirect;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,7 +27,7 @@ import java.util.List;
  * 
  * @author Hideki Shima
  */
-public class WikipediaHypernym extends LinkedHashMap<String,List<String>>
+public class WikipediaHypernym extends HashMap<String,List<String>>
  implements Serializable {
 
   private static final long serialVersionUID = 20111019L;

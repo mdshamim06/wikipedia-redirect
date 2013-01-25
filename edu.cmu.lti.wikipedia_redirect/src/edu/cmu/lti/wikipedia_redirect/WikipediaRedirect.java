@@ -16,9 +16,8 @@
 package edu.cmu.lti.wikipedia_redirect;
 
 import java.io.Serializable;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -34,10 +33,14 @@ import java.util.Set;
  * @author Hideki Shima
  *
  */
-public class WikipediaRedirect extends LinkedHashMap<String,String>
+public class WikipediaRedirect extends HashMap<String,String>
  implements Serializable {
 
   private static final long serialVersionUID = 20111008L;
+
+  public WikipediaRedirect() {
+    super();
+  }
 
   public WikipediaRedirect( int size ) {
     // RAM (heap) efficient capacity setting
@@ -57,14 +60,4 @@ public class WikipediaRedirect extends LinkedHashMap<String,String>
     }
     return results;
   }
-
-  public static class EntryComparator 
-    implements Comparator<Entry<String,String>> {
-    
-    public int compare(Entry<String, String> e1, 
-            Entry<String, String> e2) {
-      return e1.getKey().compareTo(e2.getKey());
-    }
-  }
-  
 }

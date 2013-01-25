@@ -16,11 +16,12 @@
 package edu.cmu.lti.wikipedia_redirect;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.OutputStreamWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,13 +39,18 @@ public class WikipediaRedirectExtractor {
   private static Pattern pRedirect = Pattern.compile(
           "#[ ]?[^ ]+[ ]?\\[\\[(.+?)\\]\\]", Pattern.CASE_INSENSITIVE);
   
-  public void run(File file) throws Exception {
+  public void run( File inputFile, File outputFile ) throws Exception {
     int invalidCount = 0;
     long t0 = System.nanoTime();
-    FileInputStream fis = new FileInputStream(file);
-    Map<String,String> redirectData = new HashMap<String,String>();
+    FileInputStream fis = new FileInputStream( inputFile );
+//    TreeMap<String,String> map = new HashMap<String,String>();
     InputStreamReader isr = new InputStreamReader(fis, "utf-8");
     BufferedReader br = new BufferedReader(isr);
+    FileOutputStream fos = new FileOutputStream(outputFile);
+    OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
+    BufferedWriter bw = new BufferedWriter(osw);
+
+    int count = 0;
     String title = null;
     String text = null;
     String line = null;
@@ -67,7 +73,9 @@ public class WikipediaRedirectExtractor {
             title = cleanupTitle(title);
             String redirectedTitle = m.group(1);
             if ( isValidAlias(title, redirectedTitle) ) {
-              redirectData.put(title, redirectedTitle);
+              bw.write( title+"\t"+redirectedTitle+"\n" );
+              count++;
+//              map.put( title, redirectedTitle );
             } else {
               invalidCount++;
             }
@@ -83,11 +91,15 @@ public class WikipediaRedirectExtractor {
     br.close();
     isr.close();
     fis.close();
+
+    bw.close();
+    osw.close();
+    fos.close();
     System.out.println("---- Wikipedia redirect extraction done ----");
     long t1 = System.nanoTime();
-    IOUtil.save(redirectData);
+//    IOUtil.save( map );
     System.out.println("Discarded "+invalidCount+" redirects to wikipedia meta articles.");
-    System.out.println("Extracted "+redirectData.size()+" redirects.");
+    System.out.println("Extracted "+count+" redirects.");
     System.out.println("Done in "+((double)(t1-t0)/(double)1000000000)+" [sec]");
   }
   
@@ -120,11 +132,16 @@ public class WikipediaRedirectExtractor {
       System.err.println("Tips: enclose the path with double quotes if a space exists in the path.");
       return;
     }
-    File f = new File(args[0]);
-    if (!f.exists()) {
-      System.err.println("ERROR: File not found at "+f.getAbsolutePath());
+    File inputFile = new File(args[0]);
+    if (!inputFile.exists()) {
+      System.err.println("ERROR: File not found at "+inputFile.getAbsolutePath());
       return;
     }
-    new WikipediaRedirectExtractor().run(f);
+    File outputDir = new File("target");
+    if (!outputDir.exists()) {
+      outputDir.mkdirs();
+    }
+    File outputFile = new File(outputDir, "wikipedia_redirect.txt");
+    new WikipediaRedirectExtractor().run( inputFile, outputFile );
   }
 }
